@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import Toast from "react-native-tiny-toast";
 import { registrationValidator } from "../../validators/registrationValidator";
+import success_anim from "../../assets/success_anim.json";
+import LottieView from "lottie-react-native";
 import axios from "axios";
 import {
   View,
@@ -18,12 +19,7 @@ import {
   TextInput,
   ActivityIndicator,
 } from "react-native";
-import * as Animatable from "react-native-animatable";
-import LinearGradient from "react-native-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Feather from "react-native-vector-icons/Feather";
-import { set } from "react-native-reanimated";
-import LoginScreen from "./LoginScreen";
 const SignupScreen = ({ navigation }) => {
   const { signIn } = useContext(AuthContext);
   const [error, setError] = useState("");
@@ -246,6 +242,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     borderColor: "#009387",
+    marginTop: 10,
     borderWidth: 1,
   },
   signIn: {

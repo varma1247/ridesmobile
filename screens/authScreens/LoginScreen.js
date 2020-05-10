@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { loginValidator } from "../../validators/loginValidator";
 import success_anim from "../../assets/success_anim.json";
@@ -8,23 +8,18 @@ import {
   View,
   KeyboardAvoidingView,
   Text,
-  Button,
   StyleSheet,
   Platform,
   TouchableOpacity,
-  Dimensions,
   StatusBar,
   TextInput,
   ActivityIndicator,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import * as Animatable from "react-native-animatable";
-import LinearGradient from "react-native-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Feather from "react-native-vector-icons/Feather";
-import { ScrollView } from "react-native-gesture-handler";
 const LoginScreen = ({ navigation }) => {
+  const { signIn } = useContext(AuthContext);
   const [loginDetails, setLoginDetails] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -68,7 +63,6 @@ const LoginScreen = ({ navigation }) => {
       }
     }
   };
-  const { signIn } = useContext(AuthContext);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <KeyboardAvoidingView
@@ -106,7 +100,7 @@ const LoginScreen = ({ navigation }) => {
           </View>
           {loading && <ActivityIndicator size="small" color="#0000ff" />}
           {success && (
-            <View style={{ alignItems: "center",margin:0 }}>
+            <View style={{ alignItems: "center", margin: 0 }}>
               <LottieView
                 source={success_anim}
                 autoPlay
@@ -126,7 +120,7 @@ const LoginScreen = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity>
             <View
-              style={[styles.signIn, { fontSize: 25}]}
+              style={[styles.signIn, { fontSize: 25 }]}
               onTouchEnd={() => navigation.navigate("SignupScreen")}
             >
               <Text>
@@ -188,7 +182,9 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     marginTop: 10,
-    backgroundColor: "#03a299",
+    backgroundColor: "#018786",
+    borderColor: "#009387",
+    borderWidth: 1,
   },
   signIn: {
     width: "100%",

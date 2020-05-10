@@ -1,5 +1,5 @@
 import "text-encoding-polyfill";
-import Joi from "@hapi/joi";
+const Joi = require("@hapi/joi");
 module.exports = {
   loginValidator: Joi.object({
     username: Joi.string()

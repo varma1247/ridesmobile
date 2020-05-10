@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Button,
-  Dimensions,
-  StyleSheet,
-  Image,
-} from "react-native";
+import { View, Dimensions, StyleSheet } from "react-native";
 import * as Animatable from "react-native-animatable";
 const logo = require("../assets/rideslogo.png");
 const SplashScreen = () => {
