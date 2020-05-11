@@ -24,7 +24,7 @@ const AuthContextProvider = ({ children }) => {
       } catch (error) {
         console.log("Token fetch failed");
       }
-      restoreToken(userToken);
+      restoreToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWI4N2VmYzE4ZDEzNWIxYzkyMGYxNDgiLCJpYXQiOjE1ODkxNzUwNjh9.Ctrkys2DLPXlc7Nt0HngWnMjy2X_dhNQuQlT8727U5Q");
     };
     fetchToken();
   }, []);

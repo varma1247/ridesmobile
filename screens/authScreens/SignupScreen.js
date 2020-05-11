@@ -56,7 +56,7 @@ const SignupScreen = ({ navigation }) => {
       console.log(error.details[0].message);
       setError(error.details[0].message);
     } else {
-      console.log(userDetails);
+      // console.log(userDetails);
       // axios.post("http://192.168.1.76:5000/register",userDetails).then(data=>console.log(data.user)
       // ).catch(error=>{console.log(error.response);
       // })
@@ -68,7 +68,7 @@ const SignupScreen = ({ navigation }) => {
           userDetails
         );
         setLoading(false);
-        console.log(data.user);
+        // console.log(data.user);
         setSuccess(true);
         setTimeout(() => {
           setSuccess(false);
@@ -158,10 +158,12 @@ const SignupScreen = ({ navigation }) => {
               defaultValue={userDetails.password}
             />
           </View>
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text style={styles.error}>{error && error}</Text>
-          </View>
-          {loading && <ActivityIndicator size="small" color="#0000ff" />}
+          {error ? (
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text style={styles.error}>{error}</Text>
+            </View>
+          ) : null}
+          {loading && <ActivityIndicator size="small" color="#0000ff" style={{marginTop:5}}/>}
           {success && (
             <View style={{ alignItems: "center" }}>
               <LottieView

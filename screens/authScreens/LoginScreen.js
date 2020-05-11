@@ -30,6 +30,7 @@ const LoginScreen = ({ navigation }) => {
       password: "",
     });
   }, []);
+
   const onChangeUsername = (text) => {
     setLoginDetails({ ...loginDetails, username: text });
   };
@@ -53,13 +54,14 @@ const LoginScreen = ({ navigation }) => {
         setLoading(false);
         setSuccess(true);
         setTimeout(() => {
-          setSuccess(false), signIn(data.token);
+          setSuccess(false);
+          signIn(data.token);
           console.log(data.token);
         }, 500);
       } catch (error) {
         setLoading(false);
         setError(error.response.data);
-        console.log(error.response);
+        // console.log(error.response);
       }
     }
   };
@@ -95,10 +97,18 @@ const LoginScreen = ({ navigation }) => {
               defaultValue={loginDetails.password}
             />
           </View>
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text style={styles.error}>{error && error}</Text>
-          </View>
-          {loading && <ActivityIndicator size="small" color="#0000ff" />}
+          {error ? (
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text style={styles.error}>{error}</Text>
+            </View>
+          ) : null}
+          {loading && (
+            <ActivityIndicator
+              size="small"
+              color="#0000ff"
+              style={{ marginTop: 5 }}
+            />
+          )}
           {success && (
             <View style={{ alignItems: "center", margin: 0 }}>
               <LottieView
