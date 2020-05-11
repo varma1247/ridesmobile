@@ -43,10 +43,11 @@ const PostsContextProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      setLoadingPosts(false);
       if (!data) {
         setError("No Posts");
       }
-      setLoadingPosts(false);
+      setLoadingPosts();
       setPosts(data.allPosts);
     } catch (error) {
       setError(error.response.data);

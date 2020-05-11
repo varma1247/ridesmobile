@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { loginValidator } from "../../validators/loginValidator";
+import registerForPushNotification from "../../utilities/registerForPushNotification";
 import success_anim from "../../assets/success_anim.json";
 import LottieView from "lottie-react-native";
 import axios from "axios";
@@ -38,6 +39,7 @@ const LoginScreen = ({ navigation }) => {
     setLoginDetails({ ...loginDetails, password: text });
   };
   const onPressSignin = async () => {
+    Keyboard.dismiss();
     const { error } = loginValidator.validate(loginDetails);
     if (error) {
       console.log(error.details[0].message);
@@ -56,6 +58,7 @@ const LoginScreen = ({ navigation }) => {
         setTimeout(() => {
           setSuccess(false);
           signIn(data.token);
+          registerForPushNotification(data.token)
           console.log(data.token);
         }, 500);
       } catch (error) {

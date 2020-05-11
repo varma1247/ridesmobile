@@ -111,7 +111,6 @@ const PostsScreen = ({ navigation }) => {
   // }, []);
   useEffect(() => {
     getPosts();
-    registerForPushNotification()
   }, []);
 
   // console.log(error);

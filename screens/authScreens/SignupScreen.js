@@ -51,6 +51,7 @@ const SignupScreen = ({ navigation }) => {
     setUserDetails({ ...userDetails, lastname: text });
   };
   const onPressSignup = async () => {
+    Keyboard.dismiss();
     const { error } = registrationValidator.validate(userDetails);
     if (error) {
       console.log(error.details[0].message);
