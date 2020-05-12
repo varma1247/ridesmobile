@@ -60,12 +60,14 @@ const CreatePost = () => {
             name="send"
             onPress={() => {
               // console.log(newPost);
-              Keyboard.dismiss;
+              Keyboard.dismiss();
               let finalPost = newPost;
               finalPost = finalPost.trim();
               setNewPost("");
               setError("");
-              createPost({ content: finalPost });
+              createPost({ content: finalPost }).catch((e) => {
+                console.log(e);
+              });
             }}
           ></Icon>
         </TouchableOpacity>
@@ -87,6 +89,7 @@ const PostsScreen = ({ navigation }) => {
     getPosts,
     error,
     loadingPosts,
+    setPosting,
   } = useContext(PostContext);
   const { token } = useContext(AuthContext);
   const [reload, setReload] = useState("");
@@ -110,7 +113,10 @@ const PostsScreen = ({ navigation }) => {
   //   getPosts();
   // }, []);
   useEffect(() => {
-    getPosts();
+    getPosts().catch((e) => {
+      setPosting(false);
+      console.log(e);
+    });
   }, []);
 
   // console.log(error);

@@ -164,7 +164,13 @@ const SignupScreen = ({ navigation }) => {
               <Text style={styles.error}>{error}</Text>
             </View>
           ) : null}
-          {loading && <ActivityIndicator size="small" color="#0000ff" style={{marginTop:5}}/>}
+          {loading && (
+            <ActivityIndicator
+              size="small"
+              color="#0000ff"
+              style={{ marginTop: 5 }}
+            />
+          )}
           {success && (
             <View style={{ alignItems: "center" }}>
               <LottieView
@@ -176,7 +182,10 @@ const SignupScreen = ({ navigation }) => {
             </View>
           )}
           <TouchableOpacity>
-            <View style={styles.button} onTouchEnd={() => onPressSignup()}>
+            <View
+              style={styles.button}
+              onTouchEnd={() => onPressSignup().catch((e) => console.log(e))}
+            >
               <View style={styles.signIn}>
                 <Text style={[styles.textSign, { color: "#00000f" }]}>
                   Sign Up

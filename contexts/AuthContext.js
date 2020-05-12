@@ -26,7 +26,9 @@ const AuthContextProvider = ({ children }) => {
       }
       restoreToken(userToken);
     };
-    fetchToken();
+    fetchToken().catch(e=>{
+      console.log(e);
+    });
   }, []);
 
   return (

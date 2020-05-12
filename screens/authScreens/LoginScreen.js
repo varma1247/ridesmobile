@@ -58,12 +58,18 @@ const LoginScreen = ({ navigation }) => {
         setTimeout(() => {
           setSuccess(false);
           signIn(data.token);
-          registerForPushNotification(data.token)
+          registerForPushNotification(data.token);
           console.log(data.token);
         }, 500);
       } catch (error) {
         setLoading(false);
-        setError(error.response.data);
+        if (error.response.data) {
+          if (error.response.data) {
+            setError(error.response.data);
+          } else {
+            console.log(error);
+          }
+        }
         // console.log(error.response);
       }
     }
@@ -123,7 +129,10 @@ const LoginScreen = ({ navigation }) => {
             </View>
           )}
           <TouchableOpacity>
-            <View style={styles.button} onTouchEnd={() => onPressSignin()}>
+            <View
+              style={styles.button}
+              onTouchEnd={() => onPressSignin().catch((e) => console.log(e))}
+            >
               <View style={styles.signIn}>
                 <Text style={[styles.textSign, { color: "#fff" }]}>
                   Sign In

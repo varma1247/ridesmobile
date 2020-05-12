@@ -30,7 +30,14 @@ const PostsContextProvider = ({ children }) => {
         setPosting(false);
         setPosts([data.post, ...posts]);
       } catch (error) {
-        setError(error.response.data);
+        if (error.response.data !== null) {
+          setPosting(false);
+          console.log(error);
+          // setError(error.response.data);
+        } else {
+          setPosting(false);
+          console.log(error);
+        }
       }
     }
   };
@@ -50,7 +57,11 @@ const PostsContextProvider = ({ children }) => {
       setLoadingPosts();
       setPosts(data.allPosts);
     } catch (error) {
-      setError(error.response.data);
+      if (error.response.data) {
+        setError(error.response.data);
+      } else {
+        console.log(error);
+      }
     }
   };
   // getPosts()
@@ -67,6 +78,7 @@ const PostsContextProvider = ({ children }) => {
         createPost: createPost,
         savePosts: savePosts,
         getPosts: getPosts,
+        setPosting: setPosting,
         posting: posting,
         error: error,
         setError: setError,
