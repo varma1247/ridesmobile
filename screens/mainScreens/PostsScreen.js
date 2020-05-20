@@ -1,20 +1,18 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, PureComponent } from "react";
 import { PostContext } from "../../contexts/PostsContext";
-import { AuthContext } from "../../contexts/AuthContext";
 import { ProgressBar, Colors } from "react-native-paper";
-import registerForPushNotification from "../../utilities/registerForPushNotification";
-import Constants from "expo-constants";
-import userAvatar from "../../userAvatar.png";
 import moment from "moment";
 import {
   ThemeProvider,
-  Button,
   Card,
   Divider,
   ListItem,
   Avatar,
   Text,
   Icon,
+  Button,
+  Badge,
+  Input,
 } from "react-native-elements";
 import axios from "axios";
 import {
@@ -27,9 +25,157 @@ import {
   ActivityIndicator,
   Keyboard,
 } from "react-native";
-const CreatePost = () => {
-  const [newPost, setNewPost] = useState("");
+
+const Post = React.memo(function Post({ item }) {
+  const { saveInterested, posts, savePosts } = useContext(PostContext);
+  return (
+    <Card
+      containerStyle={{
+        borderWidth: 0,
+        margin: 0,
+        padding: 10,
+        marginBottom: 10,
+        marginTop: 10,
+      }}
+      dividerStyle={{ display: "none" }}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <Avatar
+          rounded
+          source={require("../../userAvatar.png")}
+          size="medium"
+        ></Avatar>
+        <View style={{ marginLeft: 10 }}>
+          <Text style={styles.userName}>
+            {item.user.firstname + " " + item.user.lastname}
+            {/* {item.content} */}
+          </Text>
+          <Text style={styles.timestamp}>
+            {moment(item.createdat).fromNow()}
+          </Text>
+        </View>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          marginTop: 15,
+          marginLeft: 4,
+        }}
+      >
+        <Text style={{ fontSize: 25 }}>{item.content}</Text>
+      </View>
+      {!item.self ? (
+        <Button
+          raised
+          title="Interested"
+          type="outline"
+          disabled={item.liked}
+          disabledStyle={{ borderColor: "blue" }}
+          disabledTitleStyle={{ color: "blue" }}
+          style={{ marginTop: 10 }}
+          buttonStyle={{ borderColor: item.liked ? "blue" : "lightseagreen" }}
+          titleStyle={{ color: item.liked ? "blue" : "lightseagreen" }}
+          onPress={() => {
+            let newPosts = [...posts];
+            newPosts.forEach((np, index) => {
+              if (np._id.toString() == item._id.toString()) {
+                np.liked = true;
+                np.interested = np.interested + 1;
+                newPosts[index] = np;
+              }
+            });
+            saveInterested(item._id);
+            savePosts(newPosts);
+          }}
+        ></Button>
+      ) : null}
+      {item.interested ? (
+        <Badge
+          value={item.interested}
+          badgeStyle={{ width: 30, height: 30, borderRadius: 15 }}
+          containerStyle={{
+            position: "absolute",
+            top: -20,
+            right: -2,
+            borderColor: "lightblue",
+          }}
+        />
+      ) : null}
+    </Card>
+  );
+});
+const PostInput = ({ navigation, createPost }) => {
+  return (
+    <>
+      <Icon name="directions-car" style={{ marginLeft: 10 }}></Icon>
+      {/* <TextInput
+      multiline
+      width="80%"
+      textAlignVertical="top"
+      style={styles.postInput}
+      placeholder="Post a ride..."
+      defaultValue={newPost}
+      onChangeText={(text) => {
+        setNewPost(text);
+      }}
+      onBlur={() => {
+        setError("");
+      }}
+    /> */}
+      {/* <TextInput
+        multiline
+        width="80%"
+        textAlignVertical="top"
+        style={styles.postInput}
+        placeholder="Post a ride..."
+        defaultValue={newPost}
+        // onFocus={()=>{
+        //   navigation.navigate('PostModal')
+        // }}
+        onChangeText={(text) => {
+          setNewPost(text);
+        }}
+      /> */}
+      <Text
+        style={{ width: "100%", padding: 15, fontSize: 15 }}
+        onPress={() => {
+          navigation.navigate("PostModal");
+        }}
+        color="black"
+      >
+        Post a ride...
+      </Text>
+      {/* <TouchableOpacity>
+        <Icon
+          size={40}
+          name="send"
+          onPress={() => {
+            // console.log(newPost);
+            Keyboard.dismiss();
+            let finalPost = newPost;
+            finalPost = finalPost.trim();
+            setNewPost("");
+            createPost({ content: finalPost }).catch((e) => {
+              console.log(e);
+            });
+          }}
+        ></Icon>
+      </TouchableOpacity> */}
+    </>
+  );
+};
+const CreatePost = ({ navigation }) => {
   const { createPost, error, setError, posting } = useContext(PostContext);
+  console.log("hello");
+
   return (
     <>
       <View
@@ -39,44 +185,8 @@ const CreatePost = () => {
           padding: 0,
         }}
       >
-        <Icon name="create" style={{ marginLeft: 10 }}></Icon>
-        <TextInput
-          multiline
-          width="80%"
-          textAlignVertical="top"
-          style={styles.postInput}
-          placeholder="Post a ride..."
-          defaultValue={newPost}
-          onChangeText={(text) => {
-            setNewPost(text);
-          }}
-          onBlur={() => {
-            setError("");
-          }}
-        />
-        <TouchableOpacity>
-          <Icon
-            size={40}
-            name="send"
-            onPress={() => {
-              // console.log(newPost);
-              Keyboard.dismiss();
-              let finalPost = newPost;
-              finalPost = finalPost.trim();
-              setNewPost("");
-              setError("");
-              createPost({ content: finalPost }).catch((e) => {
-                console.log(e);
-              });
-            }}
-          ></Icon>
-        </TouchableOpacity>
+        <PostInput createPost={createPost} navigation={navigation} />
       </View>
-      {error ? (
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text style={styles.error}>{error}</Text>
-        </View>
-      ) : null}
       {posting ? <ProgressBar indeterminate color="#212121" /> : null}
     </>
   );
@@ -91,8 +201,8 @@ const PostsScreen = ({ navigation }) => {
     loadingPosts,
     setPosting,
   } = useContext(PostContext);
-  const { token } = useContext(AuthContext);
   const [reload, setReload] = useState("");
+  console.log("hjgdhgh");
 
   // useEffect(() => {
   //   const getPosts = async () => {
@@ -117,6 +227,7 @@ const PostsScreen = ({ navigation }) => {
       setPosting(false);
       console.log(e);
     });
+    console.log("hi");
   }, []);
 
   // console.log(error);
@@ -124,85 +235,51 @@ const PostsScreen = ({ navigation }) => {
   return (
     <ThemeProvider>
       <>
-        {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
-        {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
         <Card
-          containerStyle={{ margin: 0, padding: 0 }}
-          dividerStyle={{ display: "none" }}
+          containerStyle={{
+            borderWidth: 0,
+            padding: 0,
+            marginTop: 10,
+            marginBottom: 10,
+          }}
         >
-          <CreatePost />
+          {/* <> */}
+          <CreatePost navigation={navigation} />
+          {/* </> */}
         </Card>
         {loadingPosts ? (
           <View
             style={{
-              flexDirection: "row",
+              flex: 1,
               justifyContent: "center",
-              alignContent: "center",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              padding: 10,
+              marginBottom: 10,
             }}
           >
-            <ActivityIndicator
-              size="medium"
-              color="#0000ff"
-              style={{ marginTop: 5 }}
-            />
+            <Text>loading...</Text>
           </View>
-        ) : (
-          <Card
-            containerStyle={{ margin: 0, padding: 0 }}
-            dividerStyle={{ display: "none" }}
-          >
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 75 }}
-              data={posts}
-              renderItem={({ item }) => (
-                <>
-                  {/* <Divider style={{ height: 5 }} /> */}
-
-                  <Card
-                    containerStyle={styles.card}
-                    dividerStyle={{ display: "none" }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Avatar
-                        rounded
-                        source={require("../../userAvatar.png")}
-                        size="medium"
-                      ></Avatar>
-                      <View style={{ marginLeft: 10 }}>
-                        <Text style={styles.userName}>
-                          {item.user.firstname + " " + item.user.lastname}
-                          {/* {item.content} */}
-                        </Text>
-                        <Text style={styles.timestamp}>
-                          {moment(item.createdat).fromNow()}
-                        </Text>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        marginTop: 15,
-                        marginLeft: 4,
-                      }}
-                    >
-                      <Text style={{ fontSize: 25 }}>{item.content}</Text>
-                    </View>
-                  </Card>
-                </>
-              )}
-              keyExtractor={(post) => post._id}
-            />
-          </Card>
-        )}
+        ) : null}
+        {posts.length > 0 ? (
+          <FlatList
+            refreshing={loadingPosts}
+            onScrollToTop={() =>
+              getPosts().catch((e) => {
+                console.log(e);
+              })
+            }
+            onRefresh={() => {
+              getPosts().catch((e) => {
+                console.log(e);
+              });
+            }}
+            showsVerticalScrollIndicator={false}
+            data={posts}
+            renderItem={({ item }) => <Post item={item} />}
+            keyExtractor={(post) => post._id}
+          />
+        ) : null}
       </>
       {/* <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         {posts.map((post) => {

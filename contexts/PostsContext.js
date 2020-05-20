@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import * as Haptics from "expo-haptics";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
 import { postValidator } from "../validators/postValidator";
@@ -27,7 +28,9 @@ const PostsContextProvider = ({ children }) => {
             },
           }
         );
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
         setPosting(false);
+        data.post.self = true;
         setPosts([data.post, ...posts]);
       } catch (error) {
         if (error.response.data !== null) {
@@ -54,7 +57,7 @@ const PostsContextProvider = ({ children }) => {
       if (!data) {
         setError("No Posts");
       }
-      setLoadingPosts();
+      setLoadingPosts(false);
       setPosts(data.allPosts);
     } catch (error) {
       if (error.response.data) {
@@ -62,26 +65,44 @@ const PostsContextProvider = ({ children }) => {
       } else {
         console.log(error);
       }
+      setLoadingPosts(false);
     }
   };
   // getPosts()
   // },[])
 
-  const savePosts = (posts) => {
-    setPosts(posts);
+  const saveInterested = async (postid) => {
+    try {
+      const { data } = await axios.post(
+        "http://192.168.1.76:5000/interested",
+        { postid: postid },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(data);
+      
+    } catch (error) {}
   };
+  const savePosts=(posts)=>{
+    setPosts(posts)
+  }
 
   return (
     <PostContext.Provider
       value={{
         posts: posts,
         createPost: createPost,
-        savePosts: savePosts,
         getPosts: getPosts,
         setPosting: setPosting,
         posting: posting,
         error: error,
+        savePosts:savePosts,
         setError: setError,
+        loadingPosts: loadingPosts,
+        saveInterested:saveInterested
       }}
     >
       {children}

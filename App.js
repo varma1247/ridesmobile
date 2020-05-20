@@ -68,6 +68,16 @@ const Main = () => {
               ),
             }}
           />
+          <Tab.Screen
+            name="Profile"
+            component={PostsStackScreen}
+            options={{
+              tabBarLabel: "Profile",
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="ios-person" color={color} size={26} />
+              ),
+            }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     );
