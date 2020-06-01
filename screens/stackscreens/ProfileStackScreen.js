@@ -10,13 +10,13 @@ import {
   Input,
 } from "react-native-elements";
 import { View, Button } from "react-native";
-import PostsScreen from "../mainScreens/PostsScreen";
+import ProfileScreen from "../mainScreens/ProfileScreen";
 import InputModal from "./InputModal";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 const Stack = createStackNavigator();
 
-const PostStackScreen = ({ navigation }) => {
+const ProfileStackScreen = ({ navigation }) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -33,28 +33,11 @@ const PostStackScreen = ({ navigation }) => {
       headerMode="float"
     >
       <Stack.Screen
-        name="Posts"
-        component={PostsScreen}
-        options={{ title: "UTA RIDES" }}
-      ></Stack.Screen>
-      <Stack.Screen
-        name="PostModal"
-        component={InputModal}
-        options={{
-          title: "UTA RIDES",
-          headerLeft: () => {
-            return (
-              <Icon
-                name="cancel"
-                onPress={() => navigation.navigate('Posts')}
-                color="white"
-              ></Icon>
-            );
-          },
-          headerLeftContainerStyle: { marginLeft: 15 },
-        }}
+        name="Profile"
+        component={ProfileScreen}
+        options={{ title: "Edit Profile" }}
       ></Stack.Screen>
     </Stack.Navigator>
   );
 };
-export default PostStackScreen;
+export default ProfileStackScreen;

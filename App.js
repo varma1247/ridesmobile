@@ -1,5 +1,12 @@
 import React, { useCallback, useContext } from "react";
-import { StyleSheet, Text, View, Button, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import AuthContextProvider from "./contexts/AuthContext";
 import PostsContextProvider from "./contexts/PostsContext";
 import { AuthContext } from "./contexts/AuthContext";
@@ -10,6 +17,7 @@ import SplashScreen from "./screens/SplashScreen";
 import LoginScreen from "./screens/authScreens/LoginScreen";
 import SignupScreen from "./screens/authScreens/SignupScreen";
 import PostsStackScreen from "./screens/stackscreens/PostStackScreen";
+import ProfileStackScreen from "./screens/stackscreens/ProfileStackScreen";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -39,8 +47,8 @@ const Main = () => {
         </Drawer.Navigator> */}
         <Tab.Navigator
           initialRouteName="Home"
-          activeColor="#7f39fb"
-          inactiveColor="#018786"
+          activeColor="#2962FF"
+          inactiveColor="#78909C"
           barStyle={{
             backgroundColor: "white",
             height: 80,
@@ -70,7 +78,7 @@ const Main = () => {
           />
           <Tab.Screen
             name="Profile"
-            component={PostsStackScreen}
+            component={ProfileStackScreen}
             options={{
               tabBarLabel: "Profile",
               tabBarIcon: ({ color }) => (
@@ -89,6 +97,13 @@ export default function App() {
       <PostsContextProvider>
         {/* <View style={styles.container}> */}
         {/* <SafeAreaView> */}
+        <StatusBar
+          barStyle='light-content'
+          hidden={false}
+          backgroundColor="#00BCD4"
+          translucent={true}
+        />
+        
         <Main />
         {/* </SafeAreaView> */}
         {/* </View> */}

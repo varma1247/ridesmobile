@@ -67,7 +67,7 @@ const LoginScreen = ({ navigation }) => {
           if (error.response.data) {
             setError(error.response.data);
           } else {
-            console.log(error);
+            console.log(error.message);
           }
         }
         // console.log(error.response);

@@ -34,8 +34,7 @@ const Post = React.memo(function Post({ item }) {
         borderWidth: 0,
         margin: 0,
         padding: 10,
-        marginBottom: 10,
-        marginTop: 10,
+        marginBottom: 20,
       }}
       dividerStyle={{ display: "none" }}
     >
@@ -48,7 +47,7 @@ const Post = React.memo(function Post({ item }) {
       >
         <Avatar
           rounded
-          source={require("../../userAvatar.png")}
+          source={require("../../assets/userAvatar.png")}
           size="medium"
         ></Avatar>
         <View style={{ marginLeft: 10 }}>
@@ -81,8 +80,8 @@ const Post = React.memo(function Post({ item }) {
           disabledStyle={{ borderColor: "blue" }}
           disabledTitleStyle={{ color: "blue" }}
           style={{ marginTop: 10 }}
-          buttonStyle={{ borderColor: item.liked ? "blue" : "lightseagreen" }}
-          titleStyle={{ color: item.liked ? "blue" : "lightseagreen" }}
+          buttonStyle={{ borderColor: item.liked ? "blue" : "#78909C" }}
+          titleStyle={{ color: item.liked ? "blue" : "#78909C" }}
           onPress={() => {
             let newPosts = [...posts];
             newPosts.forEach((np, index) => {
@@ -105,8 +104,9 @@ const Post = React.memo(function Post({ item }) {
             position: "absolute",
             top: -20,
             right: -2,
-            borderColor: "lightblue",
+            borderColor: "#2962FF",
           }}
+          textStyle={{fontWeight:"bold"}}
         />
       ) : null}
     </Card>
